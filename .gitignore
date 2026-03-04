@@ -1,0 +1,14 @@
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+profiles.yml
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# Credentials / secrets
+*.credentials
+*.secret

@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: fct_sales
+    description: "Gold fact table — sales joined with customer, product, and store dimensions"
+    columns:
+      - name: order_key
+        description: "Unique order identifier"
+        tests:
+          - not_null
+      - name: continent
+        description: "Customer continent — used for serving layer filters"
+        tests:
+          - not_null
+      - name: product_name
+        tests:
+          - not_null

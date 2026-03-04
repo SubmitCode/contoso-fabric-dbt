@@ -1,0 +1,16 @@
+contoso_fabric_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: fabric
+      driver: "ODBC Driver 18 for SQL Server"
+      server: "<your-workspace-id>.datawarehouse.fabric.microsoft.com"
+      port: 1433
+      database: contoso_warehouse
+      schema: dbo
+      authentication: CLI
+      # authentication options: CLI, ActiveDirectoryInteractive, ActiveDirectoryServicePrincipal
+      # For service principal auth, add:
+      # tenant_id: "<your-tenant-id>"
+      # client_id: "<your-client-id>"
+      # client_secret: "<your-client-secret>"
