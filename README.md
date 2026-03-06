@@ -2,6 +2,8 @@
 
 > **A No-Code Data Engineering Challenge on Microsoft Fabric + dbt**
 
+![The ladder most teams are climbing — AI adoption for engineering](./image.png)
+
 Can you build a production-ready data pipeline **without writing a single line of code**?
 
 This repo is a starter kit for a hands-on challenge: starting from an **empty Fabric tenant**,
