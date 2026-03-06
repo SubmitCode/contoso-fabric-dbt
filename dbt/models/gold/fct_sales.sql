@@ -14,7 +14,7 @@
 --   store_key, store_name
 --
 -- TODO: Implement this model using your AI coding agent.
--- Share CLAUDE.md with your agent before starting.
+-- Share AGENTS.md with your agent before starting.
 
 SELECT
     -- TODO: implement the join and column selection

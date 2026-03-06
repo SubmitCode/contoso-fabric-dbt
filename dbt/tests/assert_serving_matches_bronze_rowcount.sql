@@ -8,24 +8,18 @@
 -- Failure usually means:
 --   1. A bad JOIN in fct_sales is creating duplicate rows (use LEFT JOIN, not INNER JOIN)
 --   2. The continent filter value doesn't match exactly
-
-WITH bronze_europe_count AS (
-    SELECT COUNT(*) AS cnt
-    FROM {{ source('bronze', 'bronze_sales') }} s
-    INNER JOIN {{ source('bronze', 'bronze_customer') }} c
-        ON s.customer_key = c.customer_key
-    WHERE c.continent = 'Europe'  -- ⚠️ verify this matches the actual value in your data
-),
-
-serving_count AS (
-    SELECT COUNT(*) AS cnt
-    FROM {{ ref('europe_fct_sales') }}
-)
+--   3. Bronze column names are CamelCase — use CustomerKey, Continent (not customer_key, continent)
+--
+-- TODO: Implement this test using your AI coding agent.
+--
+-- The test should:
+--   1. Count rows in {{ source('bronze', 'bronze_sales') }} joined to {{ source('bronze', 'bronze_customer') }}
+--      filtered to European customers
+--   2. Count rows in {{ ref('europe_fct_sales') }}
+--   3. Return a row (fail) when the two counts differ, return nothing (pass) when they match
+--
+-- Hint: join bronze tables on their CamelCase key columns (CustomerKey, not customer_key)
 
 SELECT
-    b.cnt AS bronze_europe_count,
-    sv.cnt AS serving_count,
-    b.cnt - sv.cnt AS difference
-FROM bronze_europe_count b
-CROSS JOIN serving_count sv
-WHERE b.cnt != sv.cnt
+    1 AS placeholder  -- replace this with your implementation
+WHERE 1 = 0          -- this stub always passes — replace with real logic

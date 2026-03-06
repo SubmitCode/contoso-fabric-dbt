@@ -10,6 +10,11 @@ contoso_fabric_dbt:
       schema: dbo
       authentication: CLI
       # authentication options: CLI, ActiveDirectoryInteractive, ActiveDirectoryServicePrincipal
+      #
+      # CLI auth requires Azure CLI to be logged in:
+      #   az login --use-device-code   (recommended for terminal/headless environments)
+      #   az login                     (opens browser)
+      #
       # For service principal auth, add:
       # tenant_id: "<your-tenant-id>"
       # client_id: "<your-client-id>"
