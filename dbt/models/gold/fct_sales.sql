@@ -1,23 +1,33 @@
 -- fct_sales.sql
 -- Gold layer: wide fact table joining sales with all dimension tables
--- Source: silver staging models
---
--- Rules:
---   - Use LEFT JOIN for all dimension joins (prevent row loss from unmatched keys)
---   - Do not filter rows here — filtering happens in the serving layer
---
--- Required output columns:
---   order_key, line_number, order_date, delivery_date,
---   quantity, unit_price, net_price, unit_cost,
---   customer_key, continent,
---   product_key, product_name, category,
---   store_key, store_name
---
--- TODO: Implement this model using your AI coding agent.
--- Share CLAUDE.md with your agent before starting.
+-- Uses LEFT JOIN for all dimension joins to prevent row loss from unmatched keys
 
 SELECT
-    -- TODO: implement the join and column selection
-    1 AS placeholder  -- remove this line when implementing
+    s.order_key,
+    s.line_number,
+    s.order_date,
+    s.delivery_date,
+    s.quantity,
+    s.unit_price,
+    s.net_price,
+    s.unit_cost,
+    s.currency_code,
+    s.exchange_rate,
+    c.customer_key,
+    c.continent,
+    c.country                   AS customer_country,
+    p.product_key,
+    p.product_name,
+    p.category,
+    p.subcategory,
+    p.brand,
+    st.store_key,
+    st.store_name,
+    st.country_code             AS store_country_code
 FROM {{ ref('stg_sales') }} s
--- TODO: add LEFT JOINs to stg_customer, stg_product, stg_store
+LEFT JOIN {{ ref('stg_customer') }} c
+    ON s.customer_key = c.customer_key
+LEFT JOIN {{ ref('stg_product') }} p
+    ON s.product_key = p.product_key
+LEFT JOIN {{ ref('stg_store') }} st
+    ON s.store_key = st.store_key

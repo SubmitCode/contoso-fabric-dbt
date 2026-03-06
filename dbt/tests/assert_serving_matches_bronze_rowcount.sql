@@ -13,8 +13,8 @@ WITH bronze_europe_count AS (
     SELECT COUNT(*) AS cnt
     FROM {{ source('bronze', 'bronze_sales') }} s
     INNER JOIN {{ source('bronze', 'bronze_customer') }} c
-        ON s.customer_key = c.customer_key
-    WHERE c.continent = 'Europe'  -- ⚠️ verify this matches the actual value in your data
+        ON s.CustomerKey = c.CustomerKey
+    WHERE c.Continent = 'Europe'  -- ⚠️ verify this matches the actual value in your data
 ),
 
 serving_count AS (

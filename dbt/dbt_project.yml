@@ -16,6 +16,7 @@ clean-targets:
 
 models:
   contoso_fabric_dbt:
+    +schema_suffix_connector: ''
     silver:
       +materialized: table
       +schema: silver

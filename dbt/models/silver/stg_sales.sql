@@ -1,15 +1,20 @@
 -- stg_sales.sql
 -- Silver layer: staged sales table
--- Source: bronze_sales (Lakehouse Delta table)
--- Transformations: type casting only — no business logic
---
--- TODO: Implement this model using your AI coding agent.
--- Refer to CLAUDE.md for cross-database source configuration.
--- Refer to HINTS.md Hint 2 for how to reference the Lakehouse source.
+-- Source: bronze_sales (Lakehouse Delta table via cross-database reference)
+-- Transformations: rename to snake_case, cast types — no business logic
 
 SELECT
-    -- TODO: implement column selection with correct type casting
-    -- Required columns: order_key, line_number, order_date (DATE), delivery_date (DATE),
-    --   customer_key, store_key, product_key, quantity, unit_price, net_price, unit_cost
-    1 AS placeholder  -- remove this line when implementing
+    CAST(OrderKey       AS BIGINT)  AS order_key,
+    CAST(LineNumber     AS INT)     AS line_number,
+    CAST(OrderDate      AS DATE)    AS order_date,
+    CAST(DeliveryDate   AS DATE)    AS delivery_date,
+    CAST(CustomerKey    AS BIGINT)  AS customer_key,
+    CAST(StoreKey       AS BIGINT)  AS store_key,
+    CAST(ProductKey     AS BIGINT)  AS product_key,
+    CAST(Quantity       AS INT)     AS quantity,
+    CAST(UnitPrice      AS DECIMAL(18,4)) AS unit_price,
+    CAST(NetPrice       AS DECIMAL(18,4)) AS net_price,
+    CAST(UnitCost       AS DECIMAL(18,4)) AS unit_cost,
+    CAST(CurrencyCode   AS VARCHAR(10))   AS currency_code,
+    CAST(ExchangeRate   AS DECIMAL(18,6)) AS exchange_rate
 FROM {{ source('bronze', 'bronze_sales') }}
