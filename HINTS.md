@@ -10,21 +10,23 @@
 
 There are two separate auth flows in this project and they work differently.
 
+**Use interactive or device code authentication only. Do not use service principals.**
+Credentials should never be stored in files or passed to your AI agent. See the security
+note in `README.md`.
+
 ### fab-cli auth (for provisioning)
 
 ```bash
 fab auth login
 ```
 
-This opens a **browser popup**. There is no device code flow in `fab auth login`. If you are
-in a headless environment, use a service principal instead:
+This opens a **browser popup** and authenticates as your own user account. This is the
+recommended approach — no credentials to manage.
 
-```bash
-fab auth login -u <client_id> -p <client_secret> --tenant <tenant_id>
-```
-
-Or supply pre-acquired tokens via environment variables (`FAB_TOKEN`, `FAB_TOKEN_ONELAKE`,
-`FAB_TOKEN_AZURE`). See the `fabric-cli` skill for details.
+There is no device code flow in `fab auth login`. If you are in a headless terminal without
+a browser on the same machine, open the browser on any device and complete the login there,
+or use pre-acquired tokens via environment variables (`FAB_TOKEN`, `FAB_TOKEN_ONELAKE`,
+`FAB_TOKEN_AZURE`) — but never store them in files you share with your agent.
 
 ### Azure CLI auth (for dbt)
 
@@ -35,15 +37,19 @@ dbt-fabric authenticates via Azure CLI (`authentication: CLI` in `profiles.yml`)
 az login --use-device-code
 ```
 
-This prints a URL and a short code. Open the URL in any browser, enter the code. No browser
-needs to launch on the machine running dbt. This is the recommended approach for terminal use.
+This prints a URL and a short code. Open the URL in any browser on any device, enter the
+code. No browser needs to launch on the machine running dbt. This is the recommended
+approach for terminal use.
 
 ### Summary
 
-| Tool | Auth method | Device code? |
-|------|-------------|--------------|
-| `fab auth login` | Browser popup | No |
-| `az login` | Browser or device code | Yes — use `--use-device-code` |
+| Tool | Recommended method | Notes |
+|------|--------------------|-------|
+| `fab auth login` | Browser popup (interactive) | No device code — must have browser access |
+| `az login` | `az login --use-device-code` | Works in any terminal, browser on any device |
+
+**Not recommended:** service principal auth. Credentials must be stored somewhere and will
+inevitably be read by your AI agent. Use your own identity instead.
 
 ---
 

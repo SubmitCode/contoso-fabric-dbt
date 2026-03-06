@@ -111,6 +111,25 @@ cd dbt && dbt run && dbt test
 
 ---
 
+## Security — Keep Your Credentials Out of the Agent Context
+
+This challenge involves authenticating to live cloud services. A few ground rules:
+
+- **Authenticate as yourself**, not via service principals. Use `fab auth login` (browser) and
+  `az login --use-device-code` (terminal). Your own identity is already scoped to what you need.
+- **Never paste credentials, tokens, or secrets into your AI agent chat.** Once in the context
+  window they can appear in logs, completions, or retries.
+- **Never commit credentials.** The `.gitignore` already excludes `profiles.yml` and `.env`
+  files, but double-check before pushing.
+- **Do not add service principal client secrets** to `profiles.yml` or any tracked file, even
+  temporarily. If you need unattended auth, use managed identity or short-lived tokens via
+  environment variables — and clear them after use.
+
+The `profiles.yml.example` intentionally contains only placeholders. Fill in real values only
+in `~/.dbt/profiles.yml` (which is gitignored).
+
+---
+
 ## License
 
 MIT — use freely, share your results!
