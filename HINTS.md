@@ -224,7 +224,61 @@ This tells dbt to use the custom schema name as-is without prepending the target
 
 ---
 
-## Hint 10: Recommended Prompt Strategy for Your AI Agent
+## Hint 10: Advanced — Use the Livy API to Test Code Before Running a Full Notebook Job
+
+Notebook jobs in Fabric are relatively slow to start and synchronous — you don't want to run a
+full ingestion job just to test whether a single cell works. For iterative development, use a
+**Livy API session** to execute code interactively against a live Spark cluster, then promote
+working code into the notebook.
+
+### What Livy is good for (in this context)
+
+- Testing a pandas-bridge snippet against a small sample before committing it to the notebook
+- Inspecting bronze table schema, row counts, or sample values after ingestion
+- Verifying column names and data types before writing silver models
+- Running one-off `spark.sql(...)` queries against existing Delta tables
+
+### What Livy cannot do (hard limits)
+
+- `saveAsTable()` — fails, no MWC token in Livy sessions
+- `spark.read.parquet("/tmp/...")` — fails, ABFS auth issue
+- Any write to the Lakehouse — use a notebook job for all writes
+
+### Workflow
+
+```
+1. Open a Livy session  →  test logic interactively (read-only or in-memory)
+2. Confirm the code works
+3. Paste working code into the notebook cells
+4. Run the full notebook job via: fab job run "Workspace/Notebook.Notebook"
+```
+
+### Starting a Livy session (via Fabric REST API)
+
+Livy sessions are started against the Spark pool associated with your Lakehouse. The endpoint
+and session management are covered in the Fabric documentation:
+
+```
+https://learn.microsoft.com/en-us/fabric/data-engineering/livy-api
+```
+
+Your AI agent can help you construct the API calls — point it at the `fabric-notebook` skill
+and ask it to set up a Livy session for interactive testing.
+
+### Example: inspect a bronze table via Livy
+
+```python
+# Safe to run in a Livy session — read-only spark.sql
+spark.sql("SELECT COUNT(*) FROM contoso_lakehouse.dbo.bronze_sales").show()
+spark.sql("DESCRIBE contoso_lakehouse.dbo.bronze_customer").show(50)
+```
+
+> See the `fabric-notebook` skill for the full capability matrix comparing Livy sessions
+> vs notebook jobs.
+
+---
+
+## Hint 11: Recommended Prompt Strategy for Your AI Agent
 
 Give context before asking for code. This saves many iterations:
 
